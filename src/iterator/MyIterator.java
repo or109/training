@@ -7,17 +7,43 @@ import java.util.Iterator;
  */
 public class MyIterator implements Iterator {
 
+    private boolean flag = false;
+    private Object last = null;
+    private Iterator ie;
+
+    public MyIterator(Iterator ie) {
+        this.ie = ie;
+    }
+
     @Override
     public boolean hasNext() {
-        return false;
+        boolean found = false;
+
+        while (ie.hasNext() && !found) {
+            this.last = ie.next();
+            if (filter(this.last)) {
+                found = true;
+            }
+        }
+
+        return found;
     }
 
     @Override
     public Object next() {
-        return null;
+        if (!flag)
+            this.hasNext();
+
+        flag = false;
+
+        return last;
     }
 
-    public boolean filter(Object obj){
-        return obj.hashCode();
+    public boolean filter(Object obj) {
+        String str = obj.toString();
+        boolean condtion = str.length() > 1;
+        //boolean condtion = obj == null;
+
+        return condtion;
     }
 }
